@@ -17,12 +17,31 @@
             padding: 0;
             margin: 0;
         }
+
+        .leaflet-pane_OSMStandard_0-pane {
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
+
+
+#trans {
+    position: fixed;
+    z-index: 999;
+    bottom: 0px;
+    left:0px;
+}
+
+
         </style>
         <title>Peta Kerawanan dan Sebaran Kejadian Tanah Longsor Kabupaten Bantul</title>
     </head>
     <body>
         <div id="map">
         </div>
+
+        <input type="range" min="1" max="100" value="50" class="slider" id="trans">
+
+
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
@@ -39,7 +58,10 @@
         <script src="data/TahunKejadian_3.js"></script>
         <script>
         var highlightLayer;
+
+
         function highlightFeature(e) {
+            console.log(e)
             highlightLayer = e.target;
 
             if (e.target.feature.geometry.type === 'LineString') {
@@ -48,11 +70,13 @@
               });
             } else {
               highlightLayer.setStyle({
-                fillColor: '#ffff00',
-                fillOpacity: 1
+          
+                //fillOpacity: 0.8
               });
             }
         }
+
+
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
         })
@@ -92,14 +116,20 @@
         layer_OSMStandard_0;
         map.addLayer(layer_OSMStandard_0);
         function pop_KelasKerawanan_1(feature, layer) {
+            
+            /*
             layer.on({
                 mouseout: function(e) {
                     for (i in e.target._eventParents) {
                         e.target._eventParents[i].resetStyle(e.target);
                     }
-                },
-                mouseover: highlightFeature,
+                }
+                //mouseover: highlightFeature,
             });
+            */
+
+
+
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">Kelas</th>\
@@ -125,8 +155,8 @@
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(26,150,65,1.0)',
+                fillOpacity: 0.5,
+                fillColor: 'rgb(26,150,65)',
                 interactive: true,
             }
                     break;
@@ -140,8 +170,8 @@
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(166,217,106,1.0)',
+                fillOpacity: 0.5,
+                fillColor: 'rgb(166,217,106)',
                 interactive: true,
             }
                     break;
@@ -155,8 +185,8 @@
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(255,255,192,1.0)',
+                fillOpacity: 0.5,
+                fillColor: 'rgb(255,255,192)',
                 interactive: true,
             }
                     break;
@@ -170,8 +200,8 @@
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(253,174,97,1.0)',
+                fillOpacity: 0.5,
+                fillColor: 'rgb(253,174,97)',
                 interactive: true,
             }
                     break;
@@ -185,8 +215,8 @@
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(215,25,28,1.0)',
+                fillOpacity: 0.5,
+                fillColor: 'rgb(215,25,28)',
                 interactive: true,
             }
                     break;
@@ -195,6 +225,7 @@
         map.createPane('pane_KelasKerawanan_1');
         map.getPane('pane_KelasKerawanan_1').style.zIndex = 401;
         map.getPane('pane_KelasKerawanan_1').style['mix-blend-mode'] = 'normal';
+
         var layer_KelasKerawanan_1 = new L.geoJson(json_KelasKerawanan_1, {
             attribution: '',
             interactive: true,
@@ -204,8 +235,26 @@
             onEachFeature: pop_KelasKerawanan_1,
             style: style_KelasKerawanan_1_0,
         });
+
         bounds_group.addLayer(layer_KelasKerawanan_1);
         map.addLayer(layer_KelasKerawanan_1);
+
+
+
+        var slide = document.getElementById("trans")
+
+        slide.oninput = function() {
+            var t = this.value
+
+            layer_KelasKerawanan_1.eachLayer(function(featureInstanceLayer){
+                featureInstanceLayer.setStyle({
+                    fillOpacity : t/100
+                })
+            })
+        }
+
+
+
         function pop_BatasAdministrasi_2(feature, layer) {
             layer.on({
                 mouseout: function(e) {
@@ -232,6 +281,8 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
+
+/*
         function style_BatasAdministrasi_2_0() {
             return {
                 pane: 'pane_BatasAdministrasi_2',
@@ -261,6 +312,10 @@
         });
         bounds_group.addLayer(layer_BatasAdministrasi_2);
         map.addLayer(layer_BatasAdministrasi_2);
+
+        */
+
+
         function pop_TahunKejadian_3(feature, layer) {
             layer.on({
                 mouseout: function(e) {
@@ -287,6 +342,12 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
+
+
+
+
+
+
         function style_TahunKejadian_3_0(feature) {
             switch(String(feature.properties['q2wHide_layer'])) {
                 case '2016':
@@ -301,7 +362,7 @@
                 weight: 1,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(227,26,28,1.0)',
+                fillColor: '#410101',
                 interactive: true,
             }
                     break;
@@ -317,7 +378,7 @@
                 weight: 1,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(255,127,0,1.0)',
+                fillColor: '#660101',
                 interactive: true,
             }
                     break;
@@ -333,7 +394,7 @@
                 weight: 1,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(51,160,44,1.0)',
+                fillColor: '#970101',
                 interactive: true,
             }
                     break;
@@ -349,7 +410,7 @@
                 weight: 1,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(31,120,180,1.0)',
+                fillColor: '#cb0404',
                 interactive: true,
             }
                     break;
@@ -365,7 +426,7 @@
                 weight: 1,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(203,203,203,1.0)',
+                fillColor: '#f20000', 
                 interactive: true,
             }
                     break;
@@ -412,9 +473,15 @@
         document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
         .title += 'Search for a place';
         var baseMaps = {};
-        L.control.layers(baseMaps,{'Tahun Kejadian<br /><table><tr><td style="text-align: center;"><img src="legend/TahunKejadian_3_20160.png" /></td><td>2016</td></tr><tr><td style="text-align: center;"><img src="legend/TahunKejadian_3_20171.png" /></td><td>2017</td></tr><tr><td style="text-align: center;"><img src="legend/TahunKejadian_3_20182.png" /></td><td>2018</td></tr><tr><td style="text-align: center;"><img src="legend/TahunKejadian_3_20193.png" /></td><td>2019</td></tr><tr><td style="text-align: center;"><img src="legend/TahunKejadian_3_20204.png" /></td><td>2020</td></tr></table>': layer_TahunKejadian_3,'<img src="legend/BatasAdministrasi_2.png" /> Batas Administrasi': layer_BatasAdministrasi_2,'Kelas Kerawanan<br /><table><tr><td style="text-align: center;"><img src="legend/KelasKerawanan_1_SangatRendah0.png" /></td><td>Sangat Rendah</td></tr><tr><td style="text-align: center;"><img src="legend/KelasKerawanan_1_Rendah1.png" /></td><td>Rendah</td></tr><tr><td style="text-align: center;"><img src="legend/KelasKerawanan_1_Sedang2.png" /></td><td>Sedang</td></tr><tr><td style="text-align: center;"><img src="legend/KelasKerawanan_1_Tinggi3.png" /></td><td>Tinggi</td></tr><tr><td style="text-align: center;"><img src="legend/KelasKerawanan_1_SangatTinggi4.png" /></td><td>Sangat Tinggi</td></tr></table>': layer_KelasKerawanan_1,"OSM Standard": layer_OSMStandard_0,}).addTo(map);
+//        L.control.layers(baseMaps,{'Tahun Kejadian<br /><table><tr><td style="text-align: center;"><img src="legend/TahunKejadian_3_20160.png" /></td><td>2016</td></tr><tr><td style="text-align: center;"><img src="legend/TahunKejadian_3_20171.png" /></td><td>2017</td></tr><tr><td style="text-align: center;"><img src="legend/TahunKejadian_3_20182.png" /></td><td>2018</td></tr><tr><td style="text-align: center;"><img src="legend/TahunKejadian_3_20193.png" /></td><td>2019</td></tr><tr><td style="text-align: center;"><img src="legend/TahunKejadian_3_20204.png" /></td><td>2020</td></tr></table>': layer_TahunKejadian_3,'<img src="legend/BatasAdministrasi_2.png" /> Batas Administrasi': layer_BatasAdministrasi_2,'Kelas Kerawanan<br /><table><tr><td style="text-align: center;"><img src="legend/KelasKerawanan_1_SangatRendah0.png" /></td><td>Sangat Rendah</td></tr><tr><td style="text-align: center;"><img src="legend/KelasKerawanan_1_Rendah1.png" /></td><td>Rendah</td></tr><tr><td style="text-align: center;"><img src="legend/KelasKerawanan_1_Sedang2.png" /></td><td>Sedang</td></tr><tr><td style="text-align: center;"><img src="legend/KelasKerawanan_1_Tinggi3.png" /></td><td>Tinggi</td></tr><tr><td style="text-align: center;"><img src="legend/KelasKerawanan_1_SangatTinggi4.png" /></td><td>Sangat Tinggi</td></tr></table>': layer_KelasKerawanan_1,"OSM Standard": layer_OSMStandard_0,}).addTo(map);
+
+
+       L.control.layers(baseMaps,{'Tahun Kejadian<br /><table><tr><td style="text-align: center;"><img src="legend/TahunKejadian_3_20160.png" /></td><td>2016</td></tr><tr><td style="text-align: center;"><img src="legend/TahunKejadian_3_20171.png" /></td><td>2017</td></tr><tr><td style="text-align: center;"><img src="legend/TahunKejadian_3_20182.png" /></td><td>2018</td></tr><tr><td style="text-align: center;"><img src="legend/TahunKejadian_3_20193.png" /></td><td>2019</td></tr><tr><td style="text-align: center;"><img src="legend/TahunKejadian_3_20204.png" /></td><td>2020</td></tr></table>': layer_TahunKejadian_3,'Kelas Kerawanan<br /><table><tr><td style="text-align: center;"><img src="legend/KelasKerawanan_1_SangatRendah0.png" /></td><td>Sangat Rendah</td></tr><tr><td style="text-align: center;"><img src="legend/KelasKerawanan_1_Rendah1.png" /></td><td>Rendah</td></tr><tr><td style="text-align: center;"><img src="legend/KelasKerawanan_1_Sedang2.png" /></td><td>Sedang</td></tr><tr><td style="text-align: center;"><img src="legend/KelasKerawanan_1_Tinggi3.png" /></td><td>Tinggi</td></tr><tr><td style="text-align: center;"><img src="legend/KelasKerawanan_1_SangatTinggi4.png" /></td><td>Sangat Tinggi</td></tr></table>': layer_KelasKerawanan_1,"OSM Standard": layer_OSMStandard_0,}).addTo(map);
+
         setBounds();
         var i = 0;
+
+/*
         layer_BatasAdministrasi_2.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
@@ -427,6 +494,9 @@
               addLabel(layer, i);
               i++;
         });
+
+*/
+
         resetLabels([layer_BatasAdministrasi_2]);
         map.on("zoomend", function(){
             resetLabels([layer_BatasAdministrasi_2]);
