@@ -152,7 +152,7 @@
 
   <!-- Modal content -->
   <div class="modal-content">
-    <span class="close">&times;</span>
+    <span class="close" id="modalclose1">&times;</span>
     <div id="main-txtbox"  contenteditable="false" spellcheck="false"><p><strong>Sumber data :</strong></p>
 <ul>
 <li>Data curah hujan bulanan selama tahun 2022 di Stasiun Geofisika Sleman, Stasiun Klimatologi Yogyakarta dan Stasiun Meteorologi Yogyakarta dari BMKG (<a href="https://dataonline.bmkg.go.id/">https://dataonline.bmkg.go.id/</a>)</li>
@@ -708,7 +708,7 @@ btn.onclick = function() {
 
 
 // Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];        
+var span = document.getElementById("modalclose1")      
 var span2 = document.getElementById("modalclose2")
 
 
