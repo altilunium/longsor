@@ -108,6 +108,45 @@
         <input type="range" min="1" max="100" value="50" class="slider" id="trans">
     </div>
 
+<div id="myModal2" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close" id="modalclose2">&times;</span>
+    <div id="main-txtbox"  contenteditable="false" spellcheck="false"><h1 id="panduan-mitigasi">Panduan Mitigasi</h1>
+<p>Upaya mitigasi tanah longsor untuk area dengan kelas kerawanan sedang, tinggi dan sangat tinggi :</p>
+<ol>
+<li>Hindari membuat pencetakan sawah baru atau kolam pada lereng yang terjal, karena dapat mengakibatkan tanah mudah bergerak.</li>
+<li>Hindari menebang pohon di sekitar lereng.</li>
+<li>Hindari pembangunan permukiman di daerah rawan bencana tanah longsor, khususnya di daerah bawah lereng atau di tepi lembah sungai terjal.</li>
+<li>Tutup rekahan di atas lereng untuk mencegah masuknya air secara cepat.</li>
+<li>Kurangi tingkat keterjangan lereng dengan pengolahan lahan terasering di kawasan lereng.</li>
+<li>Pelihara drainase lereng dengan baik untuk mencegah aliran air dari dalam lereng keluar.</li>
+<li>Buat bangunan penahan dengan pondasi kuat untuk mencegah pergerakan tanah yang dapat menimbulkan longsor</li>
+<li>Lakukan penanaman pohon yang memiliki perakaran yang dalam. Usahakan jarak tanam tidak terlalu rapat. Ruang di antara pohon diseling-selingi tanaman pendek yang bisa menjaga drainase air.</li>
+<li>Hindari penggalian pada daerah bawah lereng terjal, karena dapat menganggu kestabilan lereng.</li>
+<li>Simak informasi dan instruksi dari pemerintah terkait mengenai kemungkinan terjadinya tanah longsor.</li>
+</ol>
+<p>Sementara itu, upaya mitigasi yang bisa dilakukan bagi pemerintah, antara lain :</p>
+<ol>
+<li>Pengembangan sistem peringatan dini di daerah rawan bencana tanah longsor.</li>
+<li>Penyebarluasan informasi dan sosialisasi bencana gerakan tanah untuk masyarakat melalui berbagai media dan cara, baik secara formal maupun nonformal.</li>
+<li>Koordinasi dengan pemerintah daerah dan organisasi perangkat daerah terkait dalam upaya pengurangan risiko bencana tanah longsor.</li>
+<li>Perumusan dan penjelasan program atau kebijakan yang terkait dengan kegiatan mitigasi bencana tanah longsor</li>
+<li>Pengawasan dan pemantauan terhadap pergerakan tanah, baik dibantu oleh EWS (<i>Early Warning System)</i> maupun secara manual yang dibantu oleh relawan dari masyarakat.</li>
+<li>Pengadaan sarana dan prasarana, khusunya kendaraan alat berat dan peralatan untuk mempermudah pelaksanaan mitigasi bencana tanah longsor.</li>
+<li>Perancangan dan perekomendasian program kegiatan untuk mengurangi dampak risiko bencana tanah longsor.</li>
+<li>Fasilitasi pelayanan kepada masyarakat untuk mempermudah penyebaran informasi-informasi terkait bencana tanah longsor yang selalu diperbaharui setiap waktu.</li>
+<li>Relokasi daerah rawan longsor sebagai upaya pengurangan risiko bencana tanah longsor.</li>
+</ol>
+</div>
+
+   </div>
+</div>
+
+
+
+
     <!-- The Modal -->
 <div id="myModal" class="modal">
 
@@ -125,7 +164,7 @@
 <li>Data kejadian tanah longsor tahun 2016 - 2020 dari Badan Penanggulangan Bencana Daerah Kabupaten Bantul</li>
 </ul>
 <p><strong>Pemrosesan data</strong></p>
-<p>Data curah hujan dari BMKG berformat xlsx, yang berisi nilai curah hujan bulanan pada titik-titik stasiun pengamatan tertentu. Sementara itu, data CHIRPS berformat raster .bil yang berisi nilai DN curah hujan bulanan di seluruh dunia. Data CHIRPS ini dikonversi menjadi kumpulan titik koordinat yang memiliki nilai curah hujan. Kemudian, data CHIRPS yang sudah dikonversi ini digabungkan dengan data BMKG, lalu dilakukan interpolasi IDW untuk memperoleh data curah hujan tahunan dalam format poligon shp yang diklasifikasikan menjadi 5 kelas intensitas.</p>
+<p>Data curah hujan dari BMKG berformat xlsx, yang berisi nilai curah hujan bulanan pada titik-titik stasiun pengamatan tertentu. Sementara itu, data CHIRPS berformat raster .bil yang berisi nilai DN curah hujan bulanan di seluruh dunia. Data CHIRPS ini dikonversi menjadi kumpulan titik koordinat yang memiliki nilai curah hujan. Kemudian, data CHIRPS yang sudah dikonversi ini digabungkan dengan data BMKG, lalu dilakukan interpolasi IDW untuk memperoleh data curah hujan tahunan dalam format poligon shp yang diklasifikasikan berdasarkan beberapa 5 kelas intensitas.</p>
 <p>Data DEM berformat raster .tif yang berisi nilai DN ketinggian. Data DEM tersebut diolah untuk memperoleh data kemiringan lereng. </p>
 <p>Sementara itu, data jenis batuan, tutupan lahan dan jenis tanah memiliki format poligon shp.</p>
 <p>Kelima data tersebut (curah hujan, jenis batuan, kemiringan lereng, tutupan lahan, jenis tanah) digabungkan dan diberi bobot berdasarkan kriteria kerawanan tanah longsor sebagai berikut : </p>
@@ -243,17 +282,36 @@ Skor pembobotan tersebut kemudian diklasifikasikan kembali menjadi lima kelas ke
             */
 
 
-
-            var popupContent = '<table>\
+            
+            if (feature.properties['Kelas'].includes("Rendah")){
+                var popupContent = '<table>\
                     <tr>\
-                        <th scope="row">Kelas</th>\
-                        <td>' + (feature.properties['Kelas'] !== null ? autolinker.link(feature.properties['Kelas'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Kelas resiko</th>\
+                        <td>' + (feature.properties['Kelas'] !== null ? autolinker.link(feature.properties['Kelas'].toLocaleString().toLowerCase()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Luas (Ha)</th>\
                         <td>' + (feature.properties['Luas__Ha_'] !== null ? autolinker.link(feature.properties['Luas__Ha_'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
+            }
+            else {
+                var popupContent = '<table>\
+                    <tr><th scope="row" colspan="2"><img src="longsor.png" style="width:35px"></th></tr>\
+                    <tr>\
+                        <th scope="row">Kelas resiko</th>\
+                        <td>' + (feature.properties['Kelas'] !== null ? autolinker.link(feature.properties['Kelas'].toLocaleString().toLowerCase()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Luas (Ha)</th>\
+                        <td>' + (feature.properties['Luas__Ha_'] !== null ? autolinker.link(feature.properties['Luas__Ha_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr><th scope="row" colspan="2"> Klik <i style="color:#0085b1;cursor:pointer" onclick="openModal2()">disini</i> untuk panduan mitigasi</th></tr>\
+                </table>';
+            }
+
+
+
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
@@ -651,8 +709,11 @@ btn.onclick = function() {
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];        
+var span2 = document.getElementById("modalclose2")
+
 
 var modal = document.getElementById("myModal");
+var modal2 = document.getElementById("myModal2");
 
 function openModal(){
     console.log("blah")
@@ -665,11 +726,28 @@ span.onclick = function() {
   modal.style.display = "none";
 }
 
+span2.onclick = function() {
+  modal2.style.display = "none";
+}
+
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
+    
   }
+
+  if (event.target == modal2) {
+    modal2.style.display = "none"
+  }
+
+}
+
+
+
+function openModal2(){
+    console.log("blah")
+    modal2.style.display = "block";
 }
 
 
