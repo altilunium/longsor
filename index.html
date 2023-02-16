@@ -215,9 +215,12 @@ Skor pembobotan tersebut kemudian diklasifikasikan kembali menjadi lima kelas ke
                 color: '#ffff00',
               });
             } else {
+                console.log("nya!!")
               highlightLayer.setStyle({
-          
+            
                 //fillOpacity: 0.8
+                color : '#0085b1',
+                weight: 3
               });
             }
         }
@@ -260,7 +263,7 @@ Skor pembobotan tersebut kemudian diklasifikasikan kembali menjadi lima kelas ke
         var layer_OSMStandard_0 = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             pane: 'pane_OSMStandard_0',
             opacity: 1.0,
-            attribution: '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors, CC-BY-SA</a>',
+            attribution: '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>',
             minZoom: 1,
             maxZoom: 28,
             minNativeZoom: 0,
@@ -270,19 +273,19 @@ Skor pembobotan tersebut kemudian diklasifikasikan kembali menjadi lima kelas ke
         map.addLayer(layer_OSMStandard_0);
         function pop_KelasKerawanan_1(feature, layer) {
             
-            /*
+            
             layer.on({
                 mouseout: function(e) {
                     for (i in e.target._eventParents) {
-                        e.target._eventParents[i].resetStyle(e.target);
+                        //e.target._eventParents[i].resetStyle(e.target);
+                        e.target._eventParents[i].setStyle({weight:0});
+
                     }
-                }
-                //mouseover: highlightFeature,
+                },
+                mouseover: highlightFeature,
             });
-            */
-
-
             
+
             if (feature.properties['Kelas'].includes("Rendah")){
                 var popupContent = '<table>\
                     <tr>\
@@ -742,7 +745,6 @@ window.onclick = function(event) {
   }
 
 }
-
 
 
 function openModal2(){
